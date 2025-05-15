@@ -9,5 +9,6 @@ namespace web_api_dotnet_course.Data
 
         }
         public DbSet<Character> Characters => Set<Character>();
+        public DbSet<User> Users => Set<User>();
     }
 }
