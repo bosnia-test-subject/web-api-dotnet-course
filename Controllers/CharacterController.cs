@@ -1,10 +1,13 @@
 global using web_api_dotnet_course.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using web_api_dotnet_course.Dtos.Character;
 using web_api_dotnet_course.Services.CharacterService;
 
 namespace web_api_dotnet_course.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -15,11 +18,11 @@ namespace web_api_dotnet_course.Controllers
         {
             _characterService = characterService;
         }
-
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+            return Ok(await _characterService.GetAllCharacters(userId));
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetSingle(int id)
