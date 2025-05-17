@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using web_api_dotnet_course.Data;
 using web_api_dotnet_course.Services.CharacterService;
+using web_api_dotnet_course.Services.FightService;
+using web_api_dotnet_course.Services.WeaponService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IFightService, FightService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -41,7 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
